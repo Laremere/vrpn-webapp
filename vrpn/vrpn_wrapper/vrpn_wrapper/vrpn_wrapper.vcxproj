@@ -81,11 +81,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="macros.h" />
+    <ClInclude Include="vrpn_Analog_Web.h" />
+    <ClInclude Include="vrpn_Analog_Web_Wrapper.h" />
     <ClInclude Include="vrpn_Button_Web.h" />
     <ClInclude Include="vrpn_Button_Web_Wrapper.h" />
     <ClInclude Include="vrpn_Connection_Wrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="vrpn_Analog_Web.cpp" />
+    <ClCompile Include="vrpn_Analog_Web_Wrapper.cpp" />
     <ClCompile Include="vrpn_Button_Web.cpp" />
     <ClCompile Include="vrpn_Button_Web_Wrapper.cpp" />
     <ClCompile Include="vrpn_Connection_Wrapper.cpp" />
