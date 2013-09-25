@@ -1,0 +1,16 @@
+{
+	"port": "3883",
+	"devices":[
+		{
+			"name":"button1",
+			"type":"button",
+			"displayName":"Example Lone Button"
+		},
+		{
+			"name":"analog1",
+			"type":"slider",
+			"displayName":"Example Slider",
+			"range":[-1,1]
+		},
+	]
+}
