@@ -15,8 +15,8 @@ type Connection struct {
 	c unsafe.Pointer
 }
 
-func NewConnection() Connection {
-	return Connection{C.vrpn_Connection_New()}
+func NewConnection(port int) Connection {
+	return Connection{C.vrpn_Connection_New(C.int(port))}
 }
 
 func (c Connection) Mainloop() {

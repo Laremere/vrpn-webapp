@@ -13,17 +13,18 @@ import (
 )
 
 type Button struct {
-	c unsafe.Pointer
+	c        unsafe.Pointer
+	channels int
 }
 
 func (c Connection) NewButton(name string, channels int) Button {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return Button{C.vrpn_Button_Web_New(cname, c.c, C.int(channels))}
+	return Button{C.vrpn_Button_Web_New(cname, c.c, C.int(channels)), channels}
 }
 
 func (b Button) Update(data []bool) {
-	for i := 0; i < len(data); i++ {
+	for i := 0; i < len(data) && i < b.channels; i++ {
 		var active C.char = 0
 		if data[i] {
 			active = 1

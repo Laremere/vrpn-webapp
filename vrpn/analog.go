@@ -13,21 +13,22 @@ import (
 )
 
 type Analog struct {
-	c unsafe.Pointer
+	c        unsafe.Pointer
+	channels int
 }
 
 func (c Connection) NewAnalog(name string, channels int) Analog {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return Analog{C.vrpn_Analog_Web_New(cname, c.c, C.int(channels))}
+	return Analog{C.vrpn_Analog_Web_New(cname, c.c, C.int(channels)), channels}
 }
 
-func (b Analog) Update(data []float64) {
-	for i := 0; i < len(data); i++ {
-		C.vrpn_Analog_Web_Update(b.c, C.double(data[i]), C.int(i))
+func (a Analog) Update(data []float64) {
+	for i := 0; i < len(data) && i < a.channels; i++ {
+		C.vrpn_Analog_Web_Update(a.c, C.double(data[i]), C.int(i))
 	}
 }
 
-func (b Analog) Mainloop() {
-	C.vrpn_Analog_Web_Mainloop(b.c)
+func (a Analog) Mainloop() {
+	C.vrpn_Analog_Web_Mainloop(a.c)
 }

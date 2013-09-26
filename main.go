@@ -10,7 +10,10 @@ import (
 
 func main() {
 	log.Println("Starting...")
-	conn := vrpn.NewConnection()
+
+	go StartHttp(80)
+
+	conn := vrpn.NewConnection(3883)
 	button := conn.NewButton("Button0", 2)
 
 	buttonChan := make(chan []bool)

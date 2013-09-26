@@ -1,16 +1,19 @@
 {
-	"port": "3883",
+	"vrpn-port": "3883",
+	"http-port": "80",
 	"devices":[
 		{
-			"name":"button1",
+			"name":"button0",
 			"type":"button",
 			"displayName":"Example Lone Button"
 		},
 		{
-			"name":"analog1",
+			"name":"analog0",
 			"type":"slider",
 			"displayName":"Example Slider",
-			"range":[-1,1]
-		},
+			"range":[-1,1],
+			"initial":-0.6,
+			"step": 0.1
+		}
 	]
 }

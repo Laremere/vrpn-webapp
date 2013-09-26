@@ -4,6 +4,6 @@
 using namespace std;
 #endif
 
-EXTERN void* vrpn_Connection_New();
+EXTERN void* vrpn_Connection_New(int port);
 
 EXTERN void vrpn_Connection_Mainloop(void* conn);

@@ -4,8 +4,8 @@
 using namespace std;
 
 
-void* vrpn_Connection_New(){
-    return vrpn_create_server_connection(3883);
+void* vrpn_Connection_New(int port){
+    return vrpn_create_server_connection(port);
 }
 
 
