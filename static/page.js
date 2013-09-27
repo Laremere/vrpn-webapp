@@ -2,6 +2,7 @@ function Page(){
 	var page = this;
 	this.view = {};
 	this.view.buttons = ko.observableArray();
+	this.view.toggles = ko.observableArray();
 	this.view.sliders = ko.observableArray();
 	ko.applyBindings(this.view);
 
@@ -33,6 +34,9 @@ Page.prototype.ProcessConfig = function( data ){
 			case "button":
 				this.NewButton(device)
 				break;
+			case "toggle":
+				this.NewToggle(device)
+				break;
 			case "slider":
 				this.NewSlider(device)
 				break;
@@ -63,6 +67,18 @@ Page.prototype.NewSlider = function(device){
 		page.Send(device.name, 0, val);
 	});
 	device.val(device.initial);
+}
+
+Page.prototype.NewToggle = function(device){
+	device.val = ko.observable();
+	this.view.toggles.push(device);
+
+	var page = this;
+	device.val.subscribe(function(val){
+		page.Send(device.name, 0, val);
+		console.log(val);
+	});
+	device.val(device.initial);	
 }
 
 $(document).ready(function(){new Page();})

@@ -4,8 +4,9 @@
 	"devices":[
 		{
 			"name":"Button0",
-			"class":"button",
-			"displayName":"Example Lone Button"
+			"class":"toggle",
+			"displayName":"Example Lone Button",
+			"initial":false
 		},
 		{
 			"name":"Analog0",

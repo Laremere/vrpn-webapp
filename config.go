@@ -34,10 +34,12 @@ func ReadConfig() *Config {
 
 func CreateDevice(conn *vrpn.Connection, c ConfigDevice) *Device {
 	switch {
-	case c.Class == "button":
+	case c.Class == "button", c.Class == "toggle":
 		return NewButtonDevice(conn, c.Name, 1)
 	case c.Class == "slider":
 		return NewAnalogDevice(conn, c.Name, 1)
 	}
+
+	log.Fatal("Unkown device class: ", c.Class)
 	return nil
 }
