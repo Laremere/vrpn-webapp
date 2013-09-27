@@ -3,12 +3,19 @@ function Page(){
 	this.view = {};
 	this.view.buttons = ko.observableArray();
 	this.view.sliders = ko.observableArray();
-
 	ko.applyBindings(this.view);
 
-	$.getJSON("/config/config.json")
-		.done(function(d){page.ProcessConfig(d);})
-		.fail(function(d){page.FailedConfig(d);});
+	this.sock = new WebSocket("ws://" + window.location.host + "/sock/");
+	this.sock.onerror = function(event){
+		console.log(event);
+	}
+
+	this.sock.onopen = function(){
+		$.getJSON("/config/config.json")
+			.done(function(d){page.ProcessConfig(d);})
+			.fail(function(d){page.FailedConfig(d);});
+	}
+
 }
 
 Page.prototype.FailedConfig = function( obj, status, error ){
@@ -35,14 +42,27 @@ Page.prototype.ProcessConfig = function( data ){
 	}
 }
 
+Page.prototype.Send = function(device){
+	var message = device;
+	for (var i = 1; i < arguments.length; i ++){
+		message += "@" + arguments[i];
+	}
+	this.sock.send(message + ";");
+}
+
 Page.prototype.NewButton = function(device){
 	this.view.buttons.push(device);
 }
 
 Page.prototype.NewSlider = function(device){
 	device.val = ko.observable();
-	device.val(device.initial);
 	this.view.sliders.push(device);
+
+	var page = this;
+	device.val.subscribe(function(val){
+		page.Send(device.name, 0, val);
+	});
+	device.val(device.initial);
 }
 
-$(document).ready(function(){page = new Page();})
+$(document).ready(function(){new Page();})

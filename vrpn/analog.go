@@ -17,18 +17,18 @@ type Analog struct {
 	channels int
 }
 
-func (c Connection) NewAnalog(name string, channels int) Analog {
+func (c *Connection) NewAnalog(name string, channels int) *Analog {
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
-	return Analog{C.vrpn_Analog_Web_New(cname, c.c, C.int(channels)), channels}
+	return &Analog{C.vrpn_Analog_Web_New(cname, c.c, C.int(channels)), channels}
 }
 
-func (a Analog) Update(data []float64) {
+func (a *Analog) Update(data []float64) {
 	for i := 0; i < len(data) && i < a.channels; i++ {
 		C.vrpn_Analog_Web_Update(a.c, C.double(data[i]), C.int(i))
 	}
 }
 
-func (a Analog) Mainloop() {
+func (a *Analog) Mainloop() {
 	C.vrpn_Analog_Web_Mainloop(a.c)
 }
