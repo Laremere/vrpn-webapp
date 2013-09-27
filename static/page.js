@@ -29,7 +29,7 @@ Page.prototype.ProcessConfig = function( data ){
 	var device;
 	for (var i = 0; i < data.devices.length; i++){
 		device = data.devices[i];
-		switch (device["type"]){
+		switch (device["class"]){
 			case "button":
 				this.NewButton(device)
 				break;
@@ -37,7 +37,7 @@ Page.prototype.ProcessConfig = function( data ){
 				this.NewSlider(device)
 				break;
 			default:
-				console.log("Unkown device type: " + device["type"])
+				console.log("Unkown device class: " + device["class"])
 		}
 	}
 }
