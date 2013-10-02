@@ -18,7 +18,10 @@
 		<div data-bind="foreach: sliders">
 			<label data-bind="text: displayName, attr: {for: name}"></label>
 			<input type="range" data-bind="value: val, attr: { id: name, min: range[0], max: range[1], step: step}"/>
-			<p data-bind="text: val"></p>
+		</div>
+		<div data-bind="foreach: spinners">
+			<label data-bind="text: displayName, attr: {for: name}"></label>
+			<input type="number" data-bind="value: val, attr: { id: name, min: range[0], max: range[1], step: step}"/>
 		</div>
 	</body>
 </html>

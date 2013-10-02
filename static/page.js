@@ -4,6 +4,7 @@ function Page(){
 	this.view.buttons = ko.observableArray();
 	this.view.toggles = ko.observableArray();
 	this.view.sliders = ko.observableArray();
+	this.view.spinners = ko.observableArray();
 	ko.applyBindings(this.view);
 
 	this.sock = new WebSocket("ws://" + window.location.host + "/sock/");
@@ -40,6 +41,9 @@ Page.prototype.ProcessConfig = function( data ){
 			case "slider":
 				this.NewSlider(device)
 				break;
+			case "spinner":
+				this.NewSpinner(device)
+				break;
 			default:
 				console.log("Unkown device class: " + device["class"])
 		}
@@ -69,6 +73,18 @@ Page.prototype.NewSlider = function(device){
 	device.val(device.initial);
 }
 
+
+Page.prototype.NewSpinner = function(device){
+	device.val = ko.observable();
+	this.view.spinners.push(device);
+
+	var page = this;
+	device.val.subscribe(function(val){
+		page.Send(device.name, 0, val);
+	});
+	device.val(device.initial);
+}
+
 Page.prototype.NewToggle = function(device){
 	device.val = ko.observable();
 	this.view.toggles.push(device);
@@ -76,7 +92,6 @@ Page.prototype.NewToggle = function(device){
 	var page = this;
 	device.val.subscribe(function(val){
 		page.Send(device.name, 0, val);
-		console.log(val);
 	});
 	device.val(device.initial);	
 }

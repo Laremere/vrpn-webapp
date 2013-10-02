@@ -5,15 +5,23 @@
 		{
 			"name":"Button0",
 			"class":"toggle",
-			"displayName":"Example Lone Button",
-			"initial":false
+			"displayName":"Light",
+			"initial":true
 		},
 		{
 			"name":"Analog0",
 			"class":"slider",
-			"displayName":"Example Slider",
+			"displayName":"White Line",
 			"range":[0,100],
 			"initial":30,
+			"step": 1
+		},
+		{
+			"name":"Analog1",
+			"class":"spinner",
+			"displayName":"Red line",
+			"range":[0,100],
+			"initial":50,
 			"step": 1
 		}
 	]

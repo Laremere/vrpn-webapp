@@ -36,7 +36,7 @@ func CreateDevice(conn *vrpn.Connection, c ConfigDevice) *Device {
 	switch {
 	case c.Class == "button", c.Class == "toggle":
 		return NewButtonDevice(conn, c.Name, 1)
-	case c.Class == "slider":
+	case c.Class == "slider", c.Class == "spinner":
 		return NewAnalogDevice(conn, c.Name, 1)
 	}
 
