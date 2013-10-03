@@ -59,7 +59,25 @@ Page.prototype.Send = function(device){
 }
 
 Page.prototype.NewButton = function(device){
+	device.val = ko.observable();
 	this.view.buttons.push(device);
+
+	var page = this;
+	device.val.subscribe(function(val){
+		page.Send(device.name, 0, val);
+	});
+
+	$("#"+device.name).mousedown(function(){
+		console.log("Down");
+		device.val(true);
+		console.log(device.val());
+	});
+
+	$("#"+device.name).mouseup(function(){
+		console.log("up");
+		device.val(false);
+		console.log(device.val());
+	});
 }
 
 Page.prototype.NewSlider = function(device){

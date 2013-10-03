@@ -4,8 +4,13 @@
 	"devices":[
 		{
 			"name":"Button0",
+			"class":"button",
+			"displayName":"Drop Ball"
+		},
+		{
+			"name":"Button1",
 			"class":"toggle",
-			"displayName":"Light",
+			"displayName":"Red Light",
 			"initial":true
 		},
 		{
