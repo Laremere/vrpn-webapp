@@ -1,15 +1,14 @@
 vrpn-webapp
 ===========
 
-A vrpn server and http server for webapp controlers
+A vrpn server and http server for webapp controlers (smartphones, tablets, computers.)
 
-Building
+This material is based upon work supported by the National Science Foundation under Grant No. 1133590.
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
+
+Usage
 ===========
-To build the shared library (DLL) you'll need vrpn.  The main vrpn static library needs to be linked along with adding the top level vrpn folder to the include path.  I also linked/included the quat directory in vrpn, but I'm unsure if that's required.
-
-The go build command is used to build the final executable.
-
-The only files/folders needed in realese should be the executable, the dll, the static folder and the config folder.
+After setting up your config file to contain the control you require, save the file and run vrpn-webapp.exe.  Using the ports defined in the config file, the vrpn server and web server will start hosting.  By navigating to ip address of the hosting machine with a web browser, you will view the controls as defined in your config file.  You can also now connect to the vrpn server from you application.  NOTE:  vrpn does _not_ send the current state of devices upon connection.  So your application needs to assume the default values as defined in your config file, and you need to refresh the webpage whenever you restart your application.
 
 Config
 ===========
@@ -90,3 +89,11 @@ Example:
 		"initial":50,
 		"step": 1
 	}
+
+Building
+===========
+To build the shared library (DLL) you'll need vrpn.  The main vrpn static library needs to be linked along with adding the top level vrpn folder to the include path.  I also linked/included the quat directory in vrpn, but I'm unsure if that's required.
+
+The go build command is used to build the final executable.
+
+The only files/folders needed in realese should be the executable, the dll, the static folder and the config folder.
