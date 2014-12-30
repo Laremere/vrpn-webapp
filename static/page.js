@@ -7,6 +7,8 @@ function Page(){
 	this.view.spinners = ko.observableArray();
 	ko.applyBindings(this.view);
 
+	$.ajaxSetup({ cache: false });
+
 	this.sock = new WebSocket("ws://" + window.location.host + "/sock/");
 	this.sock.onerror = function(event){
 		console.log(event);
