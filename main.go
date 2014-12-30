@@ -4,6 +4,7 @@ import (
 	"github.com/Laremere/vrpn-webapp/vrpn"
 	"log"
 	"runtime"
+	"time"
 )
 
 var devices map[string]*Device
@@ -28,5 +29,6 @@ func main() {
 			d.Mainloop()
 		}
 		conn.Mainloop()
+		time.Sleep(time.Second / 30)
 	}
 }

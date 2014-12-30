@@ -28,7 +28,7 @@ func handleWebsocket(c *websocket.Conn) {
 		splitCommand := strings.Split(command[0:len(command)-1], "@")
 		target, ok := devices[splitCommand[0]]
 		if ok {
-			target.Update(splitCommand[1:len(splitCommand)])
+			target.Update(splitCommand[1:])
 		} else {
 			log.Println("Uknown device: ", splitCommand[0])
 		}
