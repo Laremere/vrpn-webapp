@@ -2,7 +2,7 @@ package vrpn
 
 /*
 #cgo CPPFLAGS: -I vrpn_wrapper/vrpn_wrapper
-#cgo LDFLAGS: ../vrpn_wrapper.dll
+#cgo LDFLAGS: vrpn_wrapper/Release/vrpn_wrapper.dll
 #include "vrpn_Analog_Web_Wrapper.h"
 #include "stdlib.h"
 
