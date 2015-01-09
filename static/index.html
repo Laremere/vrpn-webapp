@@ -2,26 +2,9 @@
 <html>
 	<head>
 		<title>VRPN Remote Control</title>
-		<link href="/config/style.css", rel="stylesheet" type="test/css"/>
-		<script type="text/javascript" src="/knockout-2.3.0.js"></script>
 		<script type="text/javascript" src="/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="/page.js"></script>
 	</head>
 	<body>
-		<div data-bind="foreach: buttons">
-			<button data-bind="text: displayName, attr: { id: name }"></button>
-		</div>
-		<div data-bind="foreach: toggles">
-			<input type="checkbox" data-bind="checked: val, attr: { id: name }">
-			<label data-bind="text: displayName, attr: {for: name}"></label>
-		</div>
-		<div data-bind="foreach: sliders">
-			<label data-bind="text: displayName, attr: {for: name}"></label>
-			<input type="range" data-bind="value: val, attr: { id: name, min: range[0], max: range[1], step: step}"/>
-		</div>
-		<div data-bind="foreach: spinners">
-			<label data-bind="text: displayName, attr: {for: name}"></label>
-			<input type="number" data-bind="value: val, attr: { id: name, min: range[0], max: range[1], step: step}"/>
-		</div>
 	</body>
 </html>

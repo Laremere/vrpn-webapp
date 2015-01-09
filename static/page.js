@@ -1,54 +1,14 @@
 function Page(){
 	var page = this;
 	this.view = {};
-	this.view.buttons = ko.observableArray();
-	this.view.toggles = ko.observableArray();
-	this.view.sliders = ko.observableArray();
-	this.view.spinners = ko.observableArray();
-	ko.applyBindings(this.view);
-
 	$.ajaxSetup({ cache: false });
 
 	this.sock = new WebSocket("ws://" + window.location.host + "/sock/");
 	this.sock.onerror = function(event){
-		console.log(event);
+		//Todo: clear buttons, try for reconnect
 	}
 
 	this.sock.onopen = function(){
-		$.getJSON("/config/config.json")
-			.done(function(d){page.ProcessConfig(d);})
-			.fail(function(d){page.FailedConfig(d);});
-	}
-
-}
-
-Page.prototype.FailedConfig = function( obj, status, error ){
-	console.log("Loading config error: ");
-	console.log(status);
-	console.log(error);
-	alert("Error loading config.json, js console for details.")
-} 
-
-Page.prototype.ProcessConfig = function( data ){
-	var device;
-	for (var i = 0; i < data.devices.length; i++){
-		device = data.devices[i];
-		switch (device["class"]){
-			case "button":
-				this.NewButton(device)
-				break;
-			case "toggle":
-				this.NewToggle(device)
-				break;
-			case "slider":
-				this.NewSlider(device)
-				break;
-			case "spinner":
-				this.NewSpinner(device)
-				break;
-			default:
-				console.log("Unkown device class: " + device["class"])
-		}
 	}
 }
 
@@ -58,62 +18,6 @@ Page.prototype.Send = function(device){
 		message += "@" + arguments[i];
 	}
 	this.sock.send(message + ";");
-}
-
-Page.prototype.NewButton = function(device){
-	device.val = ko.observable();
-	this.view.buttons.push(device);
-
-	var page = this;
-	device.val.subscribe(function(val){
-		page.Send(device.name, 0, val);
-	});
-
-	$("#"+device.name).mousedown(function(){
-		console.log("Down");
-		device.val(true);
-		console.log(device.val());
-	});
-
-	$("#"+device.name).mouseup(function(){
-		console.log("up");
-		device.val(false);
-		console.log(device.val());
-	});
-}
-
-Page.prototype.NewSlider = function(device){
-	device.val = ko.observable();
-	this.view.sliders.push(device);
-
-	var page = this;
-	device.val.subscribe(function(val){
-		page.Send(device.name, 0, val);
-	});
-	device.val(device.initial);
-}
-
-
-Page.prototype.NewSpinner = function(device){
-	device.val = ko.observable();
-	this.view.spinners.push(device);
-
-	var page = this;
-	device.val.subscribe(function(val){
-		page.Send(device.name, 0, val);
-	});
-	device.val(device.initial);
-}
-
-Page.prototype.NewToggle = function(device){
-	device.val = ko.observable();
-	this.view.toggles.push(device);
-
-	var page = this;
-	device.val.subscribe(function(val){
-		page.Send(device.name, 0, val);
-	});
-	device.val(device.initial);	
 }
 
 $(document).ready(function(){new Page();})
