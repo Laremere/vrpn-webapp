@@ -1,0 +1,61 @@
+
+#The port for the vrpn connection. Default is 3883.
+vrpn_port = 3883
+
+#The port number reaching the webserver.
+#The usual port for http will be 80.
+#Otherwise you'll have to specifify the port when opening the web page.
+http_port = 80
+
+#The configuration for the devices must be below the port configuration.
+#All the devices name's must be unique, even for different kinds of devices.
+
+#A button that can be pressed.  Represented in vrpn as a button device.
+[[button]]
+#The name for the address of the button device.
+name = "button0"
+#Text to display on the button in the web page
+display = "A simple button"
+
+
+#A button that can be pressed.  Represented in vrpn as a button device.
+[[button]]
+#The name for the address of the button device.  
+name = "button1"
+#Text to display on the button in the web page
+display = "Another button"
+
+#A toggle switch.  Represented in vrpn as a button device.
+[[toggle]]
+#The name for the address of the button device.
+name = "button2"
+#Text to display on the toggle in the web page.
+display = "A simple toggle"
+#Value of the toggle when the server starts.
+initial = false
+
+#A slider.  Represented in vrpn as an analog device.
+[[slider]]
+#The name for the address of the analog device.
+name = "analog0"
+#Test to display on the slider in the web page.
+display = "A simple Slider"
+#Range of numbers produced by the slider.
+range = [0, 100]
+#Value of the slider when the server starts.
+initial = 30
+#The amount the slider changes with a single tick
+step = 1
+
+#A spinner (number box with up and down buttons).  Represented in vrpn as an analog device.
+[[spinner]]
+#The name for the address of the analog device.
+name = "analog1"
+#Test to display on the spinner in the web page.
+display = "A simple spinner"
+#Range of numbers produced by the spinner.
+range = [0, 100]
+#Value of the spinner when the server starts.
+initial = 50
+#The amount changed by a the up and down buttons.
+step = 1
