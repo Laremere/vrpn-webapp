@@ -1,21 +1,18 @@
 package main
 
-//Send Conn to subscribe to events.
-//MUST handle all passed to it until conn has successfully passed to DeleteConn
-var NewConn = make(chan *Conn)
+//Send to subscribe to events.
+//MUST handle all passed to it until channel has successfully passed to Unsubscribe
+var Subscribe = make(chan chan *Event)
 
 //Send Conn to unsubscribe.
-var DeleteConn = make(chan *Conn)
+var Unsubscribe = make(chan chan *Event)
 
 //Add an event to event queue.
 var NewEvent = make(chan *Event)
 
-type Conn struct {
-}
-
 //An event to update the value of a device.
 type Event struct {
-	Source *Conn
+	Source chan *Event
 	Name   string
 	Value  string
 }
@@ -48,19 +45,18 @@ func Manager() {
 	}()
 
 	//Set of current connections.
-	connections := make(map[*Conn]struct{})
+	subscriptions := make(map[chan *Event]struct{})
 
 	//Handle events forever
 	for {
 		select {
-		case conn := <-NewConn:
+		case conn := <-Subscribe:
 			connections[conn] = struct{}{}
-		case conn := <-DeleteConn:
+		case conn := <-Unsubscribe:
 			delete(connections, conn)
 		case event := <-NextEvent:
-			for conn := range connections {
-				//send event to conn
-				_, _ = event, conn
+			for subscription := range subscriptions {
+				subscription <- event
 			}
 		}
 	}
