@@ -24,8 +24,8 @@ func main() {
 
 //The root for configuration
 type Config struct {
-	HttpPort uint16
-	VrpnPort uint16
+	VrpnPort uint16    `toml:"vrpn_port"`
+	HttpPort uint16    `toml:"http_port"`
 	Buttons  []Button  `toml:"button"`
 	Toggles  []Toggle  `toml:"toggle"`
 	Sliders  []Slider  `toml:"slider"`
