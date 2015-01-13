@@ -17,7 +17,6 @@ name = "button0"
 #Text to display on the button in the web page
 display = "A simple button"
 
-
 #A button that can be pressed.  Represented in vrpn as a button device.
 [[button]]
 #The name for the address of the button device.  
@@ -40,12 +39,13 @@ initial = false
 name = "analog0"
 #Test to display on the slider in the web page.
 display = "A simple Slider"
+#Range, initial, and step must include the decimal place, even if it's zero.
 #Range of numbers produced by the slider.
-range = [0, 100]
+range = [0.0, 100.0]
 #Value of the slider when the server starts.
-initial = 30
+initial = 30.0
 #The amount the slider changes with a single tick
-step = 1
+step = 1.0
 
 #A spinner (number box with up and down buttons).  Represented in vrpn as an analog device.
 [[spinner]]
@@ -53,9 +53,10 @@ step = 1
 name = "analog1"
 #Test to display on the spinner in the web page.
 display = "A simple spinner"
+#Range, initial, and step must include the decimal place, even if it's zero.
 #Range of numbers produced by the spinner.
-range = [0, 100]
+range = [0.0, 100.0]
 #Value of the spinner when the server starts.
-initial = 50
+initial = 50.0
 #The amount changed by a the up and down buttons.
-step = 1
+step = 1.0
