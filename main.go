@@ -18,8 +18,8 @@ func main() {
 		return
 	}
 
-	//Temporary debug
-	fmt.Println(config)
+	//Start connection and event manager.
+	Manager()
 }
 
 //The root for configuration
