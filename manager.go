@@ -53,6 +53,7 @@ func Manager() {
 		case conn := <-Subscribe:
 			subscriptions[conn] = struct{}{}
 		case conn := <-Unsubscribe:
+			close(conn)
 			delete(subscriptions, conn)
 		case event := <-NextEvent:
 			for subscription := range subscriptions {
