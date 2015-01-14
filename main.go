@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"log"
+	"net"
+	"net/http"
 )
 
 func main() {
@@ -41,8 +44,36 @@ func main() {
 	for _, device := range devices {
 		NewEvent <- &Event{nil, device.GetName(), device.GetInitial()}
 	}
-	//block forever
-	<-vrpnReady
+
+	var portStr string
+	if config.HttpPort != 80 {
+		portStr = fmt.Sprintf(":%d", config.HttpPort)
+	}
+	{
+		log.Println("Server starting.  Point a web browser to one of the following:")
+		log.Println("On this machine: localhost" + portStr)
+		inters, err := net.Interfaces()
+		if err != nil {
+			fmt.Println("Error getting addresses, exiting")
+			fmt.Println(err)
+			return
+		}
+		for _, inter := range inters {
+			addrs, err := inter.Addrs()
+			if err != nil {
+				fmt.Println("Error getting addresses, exiting")
+				fmt.Println(err)
+				return
+			}
+			for _, addr := range addrs {
+				log.Printf("Via %s: %s%s", inter.Name, addr.String(), portStr)
+			}
+		}
+	}
+
+	err = http.ListenAndServe(portStr, nil)
+	fmt.Println("Error starting webserver, exiting.")
+	fmt.Println(err)
 }
 
 //The root for configuration
