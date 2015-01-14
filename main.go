@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
+	"golang.org/x/net/websocket"
 	"log"
 	"net"
 	"net/http"
@@ -70,6 +71,9 @@ func main() {
 			}
 		}
 	}
+
+	http.Handle("/", http.FileServer(http.Dir("static")))
+	http.Handle("/sock/", websocket.Handler(HandleSocket))
 
 	err = http.ListenAndServe(portStr, nil)
 	fmt.Println("Error starting webserver, exiting.")
