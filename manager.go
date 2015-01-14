@@ -19,7 +19,7 @@ type Event struct {
 
 //Manages new connections, deleting connections, and broadcasting events
 //to all of the current connections.
-func Manager() {
+func Manager(devices []DeviceConfig) {
 	//Channel to get from the front of the event queue
 	NextEvent := make(chan *Event)
 	go func() {
@@ -44,6 +44,12 @@ func Manager() {
 		}
 	}()
 
+	//Current state of each device
+	current := make(map[string]string)
+	for _, device := range devices {
+		current[device.GetName()] = device.GetInitial()
+	}
+
 	//Set of current connections.
 	subscriptions := make(map[chan *Event]struct{})
 
@@ -52,10 +58,14 @@ func Manager() {
 		select {
 		case conn := <-Subscribe:
 			subscriptions[conn] = struct{}{}
+			for name, val := range current {
+				conn <- &Event{nil, name, val}
+			}
 		case conn := <-Unsubscribe:
 			close(conn)
 			delete(subscriptions, conn)
 		case event := <-NextEvent:
+			current[event.Name] = event.Value
 			for subscription := range subscriptions {
 				subscription <- event
 			}

@@ -36,15 +36,9 @@ func main() {
 		devices = append(devices, spinner)
 	}
 
-	vrpnReady := make(chan struct{})
-	go vrpnServe(config.VrpnPort, devices, vrpnReady)
+	go vrpnServe(config.VrpnPort, devices)
 	//Start connection and event manager.
-	go Manager()
-
-	<-vrpnReady
-	for _, device := range devices {
-		NewEvent <- &Event{nil, device.GetName(), device.GetInitial()}
-	}
+	go Manager(devices)
 
 	var portStr string
 	if config.HttpPort != 80 {
