@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"strconv"
-	"time"
 )
 
 func main() {
@@ -34,32 +32,17 @@ func main() {
 		devices = append(devices, spinner)
 	}
 
-	go func() {
-		NewEvent <- &Event{nil, "button1", strconv.FormatBool(true)}
-		val := false
-		for {
-			val = !val
-			time.Sleep(time.Second)
-			NewEvent <- &Event{nil, "button0", strconv.FormatBool(val)}
-		}
-	}()
-
-	go func() {
-		NewEvent <- &Event{nil, "analog1", "30"}
-		val := float64(0)
-		for {
-			val += 1
-			if val > 100 {
-				val = 0
-			}
-			time.Sleep(time.Second / 10)
-			NewEvent <- &Event{nil, "analog0", strconv.FormatFloat(val, 'f', -1, 64)}
-		}
-	}()
-
-	go vrpnServe(config.VrpnPort, devices)
+	vrpnReady := make(chan struct{})
+	go vrpnServe(config.VrpnPort, devices, vrpnReady)
 	//Start connection and event manager.
-	Manager()
+	go Manager()
+
+	<-vrpnReady
+	for _, device := range devices {
+		NewEvent <- &Event{nil, device.GetName(), device.GetInitial()}
+	}
+	//block forever
+	<-vrpnReady
 }
 
 //The root for configuration

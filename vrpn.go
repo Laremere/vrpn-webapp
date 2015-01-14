@@ -14,7 +14,7 @@ const (
 	vrpnAnalog
 )
 
-func vrpnServe(port uint16, devices []DeviceConfig) {
+func vrpnServe(port uint16, devices []DeviceConfig, ready chan struct{}) {
 	conn := vrpn.NewConnection(int(port))
 
 	vrpnButtonDevices := make(map[string]*vrpn.Button)
@@ -30,6 +30,7 @@ func vrpnServe(port uint16, devices []DeviceConfig) {
 
 	events := make(chan *Event)
 	Subscribe <- events
+	ready <- struct{}{}
 
 	ticker := time.Tick(time.Second)
 	for {

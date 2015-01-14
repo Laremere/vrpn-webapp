@@ -31,7 +31,7 @@ name = "button2"
 #Text to display on the toggle in the web page.
 display = "A simple toggle"
 #Value of the toggle when the server starts.
-initial = false
+initial = true
 
 #A slider.  Represented in vrpn as an analog device.
 [[slider]]
