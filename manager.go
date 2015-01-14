@@ -51,9 +51,9 @@ func Manager() {
 	for {
 		select {
 		case conn := <-Subscribe:
-			connections[conn] = struct{}{}
+			subscriptions[conn] = struct{}{}
 		case conn := <-Unsubscribe:
-			delete(connections, conn)
+			delete(subscriptions, conn)
 		case event := <-NextEvent:
 			for subscription := range subscriptions {
 				subscription <- event
