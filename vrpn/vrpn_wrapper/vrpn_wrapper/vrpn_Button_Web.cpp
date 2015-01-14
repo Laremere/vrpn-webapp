@@ -19,6 +19,9 @@ void vrpn_Button_Web::update(bool state, int i){
 
 void vrpn_Button_Web::mainloop(){
     vrpn_gettimeofday(&(vrpn_Button::timestamp), NULL);
-    vrpn_Button::report_changes();
+	for (int i = 0; i < num_buttons; i++){
+		lastbuttons[i] = !buttons[i];
+	}
+	report_changes();
 	server_mainloop();
 }

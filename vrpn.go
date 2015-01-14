@@ -20,7 +20,6 @@ func vrpnServe(port uint16, devices []DeviceConfig) {
 	vrpnButtonDevices := make(map[string]*vrpn.Button)
 	vrpnAnalogDevices := make(map[string]*vrpn.Analog)
 	for _, device := range devices {
-		log.Println(device.GetName(), device.VrpnType())
 		name := device.GetName()
 		if device.VrpnType() == vrpnButton {
 			vrpnButtonDevices[name] = conn.NewButton(name, 1)
@@ -43,7 +42,6 @@ func vrpnServe(port uint16, devices []DeviceConfig) {
 					continue
 				}
 				button.Update([]bool{val})
-				button.Mainloop()
 			} else if analog, ok := vrpnAnalogDevices[event.Name]; ok {
 				val, err := strconv.ParseFloat(event.Value, 64)
 				if err != nil {
@@ -51,11 +49,16 @@ func vrpnServe(port uint16, devices []DeviceConfig) {
 					continue
 				}
 				analog.Update([]float64{val})
-				analog.Mainloop()
 			} else {
 				log.Println("Unkown device identity,", event.Name)
 			}
 		case <-ticker:
+		}
+		for _, button := range vrpnButtonDevices {
+			button.Mainloop()
+		}
+		for _, analog := range vrpnAnalogDevices {
+			analog.Mainloop()
 		}
 		conn.Mainloop()
 	}

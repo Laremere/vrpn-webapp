@@ -11,7 +11,8 @@ vrpn_Analog_Web::~vrpn_Analog_Web(void){
 }
 
 void vrpn_Analog_Web::mainloop(){
-	report_changes();
+	vrpn_gettimeofday(&(timestamp), NULL);
+	report();
 	server_mainloop();
 }
 
