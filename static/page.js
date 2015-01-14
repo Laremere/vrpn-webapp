@@ -2,14 +2,11 @@ function Page(){
 	$.ajaxSetup({ cache: false });
 	this.NotConnected();
 	this.Connect();
+	this.val = false;
 }
 
-Page.prototype.Send = function(device){
-	var message = device;
-	for (var i = 1; i < arguments.length; i ++){
-		message += "@" + arguments[i];
-	}
-	this.sock.send(message + ";");
+Page.prototype.Send = function(device, val){
+	this.sock.send(device + ";" + val + ";");
 }
 
 Page.prototype.NotConnected = function(){
@@ -23,15 +20,27 @@ Page.prototype.Connect = function(){
 	this.sock = new WebSocket("ws://" + window.location.host + "/sock/");
 	this.sock.onerror = function(event){
 		page.NotConnected();
-		setTimeout(page.Connect(), 1000 * 3);
+		setTimeout(page.Connect, 1000 * 3);
 	}
 	this.sock.onclose = this.sock.onerror;
 
 	this.sock.onopen = function(){
+		$("body").empty();
+		page.toggle();
 	}
 
-	this.sock.onmessage = function(){
+	this.sock.onmessage = function(message){
+		var data = $.parseJSON(message.data);
+		console.log(data);
 	}
+}
+
+Page.prototype.toggle = function(){
+	this.val = !this.val
+
+	this.Send("button1", "" + this.val);
+	var page = this;
+	setTimeout(function(){page.toggle()}, 1000 * 1);
 }
 
 $(document).ready(function(){new Page();})
