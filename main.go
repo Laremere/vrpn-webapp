@@ -112,7 +112,7 @@ func (b *Button) GetInitial() string {
 
 //VrpnType gets the vrpn representation of the device.
 func (*Button) VrpnType() VrpnType {
-	return vrpnButton
+	return VrpnButton
 }
 
 //WebType gets the webpage representation of the device.
@@ -140,7 +140,7 @@ func (t *Toggle) GetInitial() string {
 
 //VrpnType gets the vrpn representation of the device.
 func (*Toggle) VrpnType() VrpnType {
-	return vrpnButton
+	return VrpnButton
 }
 
 //WebType gets the webpage representation of the device.
@@ -170,7 +170,7 @@ func (s *Slider) GetInitial() string {
 
 //VrpnType gets the vrpn representation of the device.
 func (*Slider) VrpnType() VrpnType {
-	return vrpnAnalog
+	return VrpnAnalog
 }
 
 //WebType gets the webpage representation of the device.
@@ -200,7 +200,7 @@ func (s *Spinner) GetInitial() string {
 
 //VrpnType gets the vrpn representation of the device.
 func (*Spinner) VrpnType() VrpnType {
-	return vrpnAnalog
+	return VrpnAnalog
 }
 
 //WebType gets the webpage representation of the device.

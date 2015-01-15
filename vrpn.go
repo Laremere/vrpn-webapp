@@ -12,7 +12,7 @@ type VrpnType uint8
 
 const (
 	//VrpnButton represents a vrpn true or false value
-	VrpnButton = vrpnType(iota)
+	VrpnButton = VrpnType(iota)
 	//VrpnAnalog represents a vrpn float value
 	VrpnAnalog
 )
