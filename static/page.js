@@ -40,7 +40,7 @@ Page.prototype.toggle = function(){
 
 	this.Send("button1", "" + this.val);
 	var page = this;
-	setTimeout(function(){page.toggle()}, 1000 * 1);
+	setTimeout(function(){page.toggle()}, 1000 * 10);
 }
 
 $(document).ready(function(){new Page();})

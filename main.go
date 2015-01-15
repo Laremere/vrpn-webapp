@@ -67,7 +67,8 @@ func main() {
 	}
 
 	http.Handle("/", http.FileServer(http.Dir("static")))
-	http.Handle("/sock/", websocket.Handler(HandleSocket))
+	wsh := WebSocketHandler{devices}
+	http.Handle("/sock/", websocket.Handler(wsh.HandleSocket))
 
 	err = http.ListenAndServe(portStr, nil)
 	fmt.Println("Error starting webserver, exiting.")
@@ -88,7 +89,8 @@ type Config struct {
 type DeviceConfig interface {
 	GetName() string    //Device Name
 	GetInitial() string //Initial Value
-	VrpnType() vrpnType
+	VrpnType() vrpnType //VRPN analog or button
+	WebType() string    //info for web browser
 }
 
 //Represents a clickable button.
@@ -110,6 +112,10 @@ func (*Button) VrpnType() vrpnType {
 	return vrpnButton
 }
 
+func (*Button) WebType() string {
+	return "button"
+}
+
 //Represents a toggle box.
 //See the default config.toml for documentation on components.
 type Toggle struct {
@@ -128,6 +134,10 @@ func (t *Toggle) GetInitial() string {
 
 func (*Toggle) VrpnType() vrpnType {
 	return vrpnButton
+}
+
+func (*Toggle) WebType() string {
+	return "toggle"
 }
 
 //Represents a slider bar.
@@ -152,6 +162,10 @@ func (*Slider) VrpnType() vrpnType {
 	return vrpnAnalog
 }
 
+func (*Slider) WebType() string {
+	return "slider"
+}
+
 //Represents a number selector.
 //See the default config.toml for documentation on components.
 type Spinner struct {
@@ -172,4 +186,8 @@ func (s *Spinner) GetInitial() string {
 
 func (*Spinner) VrpnType() vrpnType {
 	return vrpnAnalog
+}
+
+func (*Spinner) WebType() string {
+	return "spinner"
 }
