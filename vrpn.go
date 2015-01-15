@@ -7,21 +7,25 @@ import (
 	"time"
 )
 
-type vrpnType uint8
+//VrpnType is how the device should be prepresented in VRPN
+type VrpnType uint8
 
 const (
-	vrpnButton = vrpnType(iota)
-	vrpnAnalog
+	//VrpnButton represents a vrpn true or false value
+	VrpnButton = vrpnType(iota)
+	//VrpnAnalog represents a vrpn float value
+	VrpnAnalog
 )
 
-func vrpnServe(port uint16, devices []DeviceConfig) {
+//VrpnServe handles starting a vrpn server and broadcasting events over it.
+func VrpnServe(port uint16, devices []DeviceConfig) {
 	conn := vrpn.NewConnection(int(port))
 
 	vrpnButtonDevices := make(map[string]*vrpn.Button)
 	vrpnAnalogDevices := make(map[string]*vrpn.Analog)
 	for _, device := range devices {
 		name := device.GetName()
-		if device.VrpnType() == vrpnButton {
+		if device.VrpnType() == VrpnButton {
 			vrpnButtonDevices[name] = conn.NewButton(name, 1)
 		} else {
 			vrpnAnalogDevices[name] = conn.NewAnalog(name, 1)

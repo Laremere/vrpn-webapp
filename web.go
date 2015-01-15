@@ -9,15 +9,19 @@ import (
 	"log"
 )
 
+//WebSocketHandler provides a handler for websocket connections given
+//a list of devices.
 type WebSocketHandler struct {
 	devices []DeviceConfig
 }
 
+//HandleSocket sends devices and events over the websocket,
+//and recieves the events from the websocket to broadcast.
 func (wsh *WebSocketHandler) HandleSocket(ws *websocket.Conn) {
 	log.Println("Websocket connected: ", ws.RemoteAddr())
 	defer log.Println("Websocket disconnected", ws.RemoteAddr())
 
-	jm := NewJsonMessenger(ws)
+	jm := NewJSONMessenger(ws)
 	for _, device := range wsh.devices {
 		err := jm.Send("new_"+device.WebType(), device)
 		if err != nil {
@@ -28,7 +32,7 @@ func (wsh *WebSocketHandler) HandleSocket(ws *websocket.Conn) {
 	events := make(chan *Event)
 	Subscribe <- events
 
-	go SendEvents(events, jm)
+	go wsh.SendEvents(events, jm)
 
 	r := bufio.NewReader(ws)
 	for {
@@ -44,7 +48,10 @@ func (wsh *WebSocketHandler) HandleSocket(ws *websocket.Conn) {
 	}
 }
 
-func SendEvents(events chan *Event, jm *JsonMessenger) {
+//SendEvents listens to event broadcasts and sends those
+//events to the web page.  It also handles closing the subscription
+//when a connection is lost.
+func (*WebSocketHandler) SendEvents(events chan *Event, jm *JSONMessenger) {
 	//When send events exists, unsubscribe and drain the events
 	defer func() {
 		go func() {
@@ -73,20 +80,26 @@ func SendEvents(events chan *Event, jm *JsonMessenger) {
 
 }
 
-type JsonMessenger struct {
+//JSONMessenger sends json objects over a writer (the websocket)
+//in single calls to the write function for the whole object, so
+//it can be recieved by the client as a single message.
+type JSONMessenger struct {
 	w io.Writer
 	b bytes.Buffer
 	e *json.Encoder
 }
 
-func NewJsonMessenger(w io.Writer) *JsonMessenger {
-	var j JsonMessenger
+//NewJSONMessenger creates a JSONMessenger over the given writer.
+func NewJSONMessenger(w io.Writer) *JSONMessenger {
+	var j JSONMessenger
 	j.w = w
 	j.e = json.NewEncoder(&j.b)
 	return &j
 }
 
-func (j *JsonMessenger) Send(messageType string, messageData interface{}) error {
+//Send sends over the writer a JSON object which has a MessageType field with the value
+//given by messageType, and it serializes messageData into json in the Data field.
+func (j *JSONMessenger) Send(messageType string, messageData interface{}) error {
 	type Message struct {
 		MessageType string
 		Data        interface{}

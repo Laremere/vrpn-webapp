@@ -10,14 +10,14 @@ var Unsubscribe = make(chan chan *Event)
 //Add an event to event queue.
 var NewEvent = make(chan *Event)
 
-//An event to update the value of a device.
+//Event to update the value of a device.
 type Event struct {
 	Source chan *Event
 	Name   string
 	Value  string
 }
 
-//Manages new connections, deleting connections, and broadcasting events
+//Manager manages new connections, deleting connections, and broadcasting events
 //to all of the current connections.
 func Manager(devices []DeviceConfig) {
 	//Channel to get from the front of the event queue
@@ -37,7 +37,7 @@ func Manager(devices []DeviceConfig) {
 			select {
 			case NextEvent <- queue[next]:
 				queue[next] = nil
-				next += 1
+				next++
 			case add := <-NewEvent:
 				queue = append(queue, add)
 			}

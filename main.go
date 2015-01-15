@@ -22,7 +22,7 @@ func main() {
 		return
 	}
 
-	devices := make([]DeviceConfig, 0)
+	var devices []DeviceConfig
 	for _, button := range config.Buttons {
 		devices = append(devices, button)
 	}
@@ -36,13 +36,13 @@ func main() {
 		devices = append(devices, spinner)
 	}
 
-	go vrpnServe(config.VrpnPort, devices)
+	go VrpnServe(config.VrpnPort, devices)
 	//Start connection and event manager.
 	go Manager(devices)
 
 	var portStr string
-	if config.HttpPort != 80 {
-		portStr = fmt.Sprintf(":%d", config.HttpPort)
+	if config.HTTPPort != 80 {
+		portStr = fmt.Sprintf(":%d", config.HTTPPort)
 	}
 	{
 		log.Println("Server starting.  Point a web browser to one of the following:")
@@ -75,48 +75,52 @@ func main() {
 	fmt.Println(err)
 }
 
-//The root for configuration
+//Config holds the data from the configuration file
 type Config struct {
 	VrpnPort uint16     `toml:"vrpn_port"`
-	HttpPort uint16     `toml:"http_port"`
+	HTTPPort uint16     `toml:"http_port"`
 	Buttons  []*Button  `toml:"button"`
 	Toggles  []*Toggle  `toml:"toggle"`
 	Sliders  []*Slider  `toml:"slider"`
 	Spinners []*Spinner `toml:"spinner"`
 }
 
-//Interface for reading device's information
+//DeviceConfig allows generic access devices
 type DeviceConfig interface {
 	GetName() string    //Device Name
 	GetInitial() string //Initial Value
-	VrpnType() vrpnType //VRPN analog or button
+	VrpnType() VrpnType //VRPN analog or button
 	WebType() string    //info for web browser
 }
 
-//Represents a clickable button.
+//Button represents a clickable button.
 //See the default config.toml for documentation on components.
 type Button struct {
 	Name    string
 	Display string
 }
 
+//GetName gets the device's vrpn name.
 func (b *Button) GetName() string {
 	return b.Name
 }
 
+//GetInitial gets the initial state of the device.
 func (b *Button) GetInitial() string {
 	return "false"
 }
 
-func (*Button) VrpnType() vrpnType {
+//VrpnType gets the vrpn representation of the device.
+func (*Button) VrpnType() VrpnType {
 	return vrpnButton
 }
 
+//WebType gets the webpage representation of the device.
 func (*Button) WebType() string {
 	return "button"
 }
 
-//Represents a toggle box.
+//Toggle epresents a toggle box.
 //See the default config.toml for documentation on components.
 type Toggle struct {
 	Name    string
@@ -124,23 +128,27 @@ type Toggle struct {
 	Initial bool
 }
 
+//GetName gets the device's vrpn name.
 func (t *Toggle) GetName() string {
 	return t.Name
 }
 
+//GetInitial gets the initial state of the device.
 func (t *Toggle) GetInitial() string {
 	return fmt.Sprint(t.Initial)
 }
 
-func (*Toggle) VrpnType() vrpnType {
+//VrpnType gets the vrpn representation of the device.
+func (*Toggle) VrpnType() VrpnType {
 	return vrpnButton
 }
 
+//WebType gets the webpage representation of the device.
 func (*Toggle) WebType() string {
 	return "toggle"
 }
 
-//Represents a slider bar.
+//Slider represents a slider bar.
 //See the default config.toml for documentation on components.
 type Slider struct {
 	Name    string
@@ -150,23 +158,27 @@ type Slider struct {
 	Step    float64
 }
 
+//GetName gets the device's vrpn name.
 func (s *Slider) GetName() string {
 	return s.Name
 }
 
+//GetInitial gets the initial state of the device.
 func (s *Slider) GetInitial() string {
 	return fmt.Sprint(s.Initial)
 }
 
-func (*Slider) VrpnType() vrpnType {
+//VrpnType gets the vrpn representation of the device.
+func (*Slider) VrpnType() VrpnType {
 	return vrpnAnalog
 }
 
+//WebType gets the webpage representation of the device.
 func (*Slider) WebType() string {
 	return "slider"
 }
 
-//Represents a number selector.
+//Spinner represents a number selector.
 //See the default config.toml for documentation on components.
 type Spinner struct {
 	Name    string
@@ -176,18 +188,22 @@ type Spinner struct {
 	Step    float64
 }
 
+//GetName gets the device's vrpn name.
 func (s *Spinner) GetName() string {
 	return s.Name
 }
 
+//GetInitial gets the initial state of the device.
 func (s *Spinner) GetInitial() string {
 	return fmt.Sprint(s.Initial)
 }
 
-func (*Spinner) VrpnType() vrpnType {
+//VrpnType gets the vrpn representation of the device.
+func (*Spinner) VrpnType() VrpnType {
 	return vrpnAnalog
 }
 
+//WebType gets the webpage representation of the device.
 func (*Spinner) WebType() string {
 	return "spinner"
 }
